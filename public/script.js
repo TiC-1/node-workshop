@@ -1,6 +1,6 @@
 $(document).ready(function() {
     $.ajax({
-        url: '/posts',
+        url: '/blogposts',
         dataType: 'json',
         success: function(data) {
 
@@ -18,7 +18,7 @@ $(document).ready(function() {
                 postDiv.appendChild(thumbnail);
                 postDiv.appendChild(postText);
                 postContainer.appendChild(postDiv);
-                
+
             }
         },
         error: function(error){

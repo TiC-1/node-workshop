@@ -33,9 +33,20 @@ function handler(request, response) {
       response.end(JSON.stringify(parsedData));
     });
 
+  } else if (endpoint === "/blogposts") {
+        fs.readFile(__dirname + "/src/posts.json", function(error, file){
+    if (error) {
+      console.error(error);
+      response.writeHead(404);
+    } else {
+      response.writeHead(200, {"Content-type": "application/json"});
+            response.write(file);
+        }
+        response.end();
+      });
+    
   } else {
     fs.readFile(__dirname + "/public/" + endpoint, function(error, file) {
-
       if (error) {
         console.error(error);
         response.writeHead(404);
@@ -44,6 +55,7 @@ function handler(request, response) {
       }
       response.end();
     });
+
     // response.writeHead(404);
     // response.end();
   }
