@@ -27,24 +27,40 @@ function handler(request, response) {
     });
     request.on("end", function() {
       var parsedData = querystring.parse(data);
-      response.writeHead(200, {
-        "Content-type": "application/json"
-      });
-      response.end(JSON.stringify(parsedData));
-    });
-
-  } else if (endpoint === "/blogposts") {
-        fs.readFile(__dirname + "/src/posts.json", function(error, file){
-    if (error) {
-      console.error(error);
-      response.writeHead(404);
-    } else {
-      response.writeHead(200, {"Content-type": "application/json"});
-            response.write(file);
+      fs.readFile(__dirname + "/src/posts.json", function(error, file) {
+        if (error) {
+          console.error(error);
+          response.writeHead(404);
+        } else {
+          var blogposts = JSON.parse(file);
+          blogposts[Date.now()] = parsedData.blogpost;
         }
+        fs.writeFile(__dirname + "/src/posts.json", JSON.stringify(blogposts), function(error) {
+          if (error) {
+            console.error(error);
+            response.writeHead(404);
+          }
+        response.writeHead(302, {  "Location": "/"  });
         response.end();
       });
-    
+});
+});
+  } else if (endpoint === "/blogposts") {
+    fs.readFile(__dirname + "/src/posts.json", function(error, file) {
+      if (error) {
+        console.error(error);
+        response.writeHead(404);
+      } else {
+
+
+        response.writeHead(200, {
+          "Content-type": "application/json"
+        });
+        response.write(file);
+      }
+      response.end();
+    });
+
   } else {
     fs.readFile(__dirname + "/public/" + endpoint, function(error, file) {
       if (error) {
