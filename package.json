@@ -4,7 +4,7 @@
   "description": "<img src=\"readme-images/logo.png\" alt=\"node-girls-logo\" styles=\"text-align:center;\" />",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "nodemon node test/*test.js | tap-spec",
     "start": "nodemon node server.js"
   },
   "repository": {
@@ -18,6 +18,14 @@
   },
   "homepage": "https://github.com/TiC-1/node-workshop#readme",
   "devDependencies": {
-    "nodemon": "^1.15.1"
+    "nodemon": "^1.15.1",
+    "supertest": "^3.0.0",
+    "tap-spec": "^4.1.1",
+    "tape": "^4.9.0"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "src/posts.json"
+    ]
   }
 }
