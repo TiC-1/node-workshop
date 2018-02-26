@@ -1,5 +1,6 @@
 var http = require("http");
 var fs = require("fs");
+var querystring = require("querystring");
 
 function handler(request, response) {
   console.log(request.url);
@@ -19,8 +20,18 @@ function handler(request, response) {
       response.end();
     });
 
-  } else if (endpoint === "/test") {
-    response.end("testing");
+  } else if (endpoint === "/blogpost/create") {
+    var data = "";
+    request.on("data", function(dataBlock) {
+      data += dataBlock;
+    });
+    request.on("end", function() {
+      var parsedData = querystring.parse(data);
+      response.writeHead(200, {
+        "Content-type": "application/json"
+      });
+      response.end(JSON.stringify(parsedData));
+    });
 
   } else {
     fs.readFile(__dirname + "/public/" + endpoint, function(error, file) {
@@ -43,6 +54,6 @@ function handler(request, response) {
 
 var server = http.createServer(handler);
 
-server.listen(3001, function() {
-  console.log("listenig port 3001");
+server.listen(3002, function() {
+  console.log("listenig port 3002");
 });
